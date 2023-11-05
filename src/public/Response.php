@@ -29,6 +29,11 @@ class ApiException extends Exception
 	{
 		parent::__construct($message);
 	}
+
+	public function __toString(): string
+	{
+		return get_class($this) . " " .  $this->getMessage();
+	}
 }
 
 class RmApi
@@ -44,6 +49,8 @@ class RmApi
 		CURLOPT_SSL_VERIFYPEER => false,
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_HTTPHEADER => self::HEADER,
+		CURLOPT_CONNECTTIMEOUT => 3,
+		CURLOPT_TIMEOUT => 5, // Set a timeout of 10 seconds
 	];
 	public static function post(array $data)
 	{
@@ -54,7 +61,11 @@ class RmApi
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 
 		$response = curl_exec($ch);
-		if (curl_errno($ch)) throw new ApiException(curl_error($ch));
+		if (curl_errno($ch)) {
+			return new Response([
+				'error' => ['message' => curl_error($ch)]
+			], false, 400);
+		}
 
 		$http_code =  curl_getinfo($ch, CURLINFO_HTTP_CODE);
 

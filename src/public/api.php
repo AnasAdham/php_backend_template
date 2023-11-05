@@ -17,6 +17,7 @@ if (empty($_POST)) {
 	$_POST['gettype'] = $_GET['gettype'];
 	$_POST['data'] = $_GET['data'];
 }
+sleep(10);
 
 if ($_POST['gettype'] == "post") {
 	if ($_POST['data'] == 1) {

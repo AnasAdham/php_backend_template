@@ -18,5 +18,5 @@ try {
 		echo '<p style="color: red">' . $data->error['message'] . '</p>';
 	}
 } catch (Exception $th) {
-	echo $th->getMessage();
+	echo (string) $th;
 }
