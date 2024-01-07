@@ -22,7 +22,11 @@ echo $text;
 $paymentStatus = 12;
 try {
 	$result = match ($paymentStatus) {
-		1 =>  'Paid',
+		1 =>  function () {
+			$string_1 = 'Anas';
+			$string_2 = 'Adham';
+			return $string_1 . " " . $string_2;
+		},
 		2 =>  'Not',
 		3 =>  'Failed',
 		4 =>  'Pending',
