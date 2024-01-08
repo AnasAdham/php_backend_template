@@ -1,0 +1,146 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"
+        integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+        crossorigin="anonymous"></script>
+</head>
+<style>
+    .hide {
+        display: none;
+    }
+</style>
+
+<body>
+    <div id="current-mode">normal</div>
+    <div id="button-row" class="">
+        <button id="a_key" onclick="console.log('YOO')">Submit</button>
+        <button id="b_key" onclick="console.log('Function 2')">Function 2</button>
+        <button id="c_key" onclick="console.log('Function 3')">Function 3</button>
+        <button id="d_key" onclick="console.log('Function 4')">Function 4</button>
+        <button id="e_key" onclick="console.log('Function 5')">Function 5</button>
+    </div>
+    <div>kfjskfjfjksd</div>
+</body>
+
+<script>
+
+    const button = document.getElementById('a_key');
+    const displayCurrentMode = document.getElementById('current-mode');
+
+    const SCAN_MODE = 'scan';
+    const NORMAL_MODE = 'normal';
+    const POPUP_MODE = 'popup';
+    const DISPLAY_TYPE = 1;
+
+    var currentMode = NORMAL_MODE;
+    // Allow other keys to register as barcode scan
+    var allowScan = DISPLAY_TYPE === 1 ? false : true;
+
+    document.addEventListener("keydown", (e) => {
+        if (e.keyCode === 27) {
+            // Escape key
+            switchMode();
+            displayCurrentMode.innerText = currentMode;
+            return;
+        }
+
+
+        if (!allowScan) {
+            handleKeypressForPosFunction(e);
+        } else {
+            handleScan(e)
+        }
+
+
+
+    }, false);
+
+    function handleKeypressForPosFunction(e) {
+        const keyCode = e.keyCode;
+        if (keyCode === 65) {
+            popUpMode();
+            // button.click();
+            const input = prompt('Insert input');
+            console.log(input);
+            return;
+        }
+         if (keyCode === 66) {
+            popUpMode();
+            // button.click();
+            const answer = confirm('Are you sure');
+            console.log(answer);
+            return;
+        }
+    }
+
+    function handleScan(e) {
+        console.log("CURRENTLY SCANNING ( " + e.key + " ) KEYCODE - " + e.keyCode);
+    }
+
+    function popUpMode() {
+        currentMode = POPUP_MODE;
+        displayCurrentMode.innerText = currentMode;
+        // allowScan = true;
+    }
+
+    function switchMode() {
+        if (DISPLAY_TYPE == 2) {
+            return;
+        }
+
+        // if display type = 1 (normal)
+        if (DISPLAY_TYPE === 1) {
+
+            if(currentMode === NORMAL_MODE){
+                switchToScan();
+            }else if(currentMode === POPUP_MODE){
+                // popoff
+                switchToNormal();
+            }else{
+                switchToNormal();
+            }
+        }
+    }
+
+    function switchToNormal() {
+        currentMode = NORMAL_MODE;
+        showButtons();
+        allowScan = false;
+    }
+
+    function switchToScan() {
+        currentMode = SCAN_MODE;
+        hideButtons();
+        allowScan = true;
+    }
+
+    function hideButtons() {
+        addClass('button-row', 'hide');
+    }
+
+    function showButtons() {
+        removeClass('button-row', 'hide');
+    }
+
+    function hideButtons() {
+        var element = document.getElementById('button-row');
+        element.classList.add('hide');
+    }
+
+    function addClass(id, className) {
+        var element = document.getElementById(id);
+        element.classList.add(className);
+    }
+    function removeClass(id, className) {
+        var element = document.getElementById(id);
+        element.classList.remove(className);
+    }
+
+
+</script>
+
+</html>
